@@ -1,17 +1,13 @@
-source https://nuget.org/api/v2
+framework: auto-detect
+storage: none
+source https://api.nuget.org/v3/index.json
 
-nuget CommandLineParser >= 2.1.1-beta
-nuget FSharp.Formatting
-nuget FsCheck
-nuget FsCheck.Xunit
-nuget StyleCop.Analyzers
-nuget xunit 2.2.0 restriction: >= net452
-nuget xunit.abstractions 2.0.1 restriction: >= net452
-nuget xunit.extensibility.core 2.2.0 restriction: >= net452
-nuget xunit.extensibility.execution 2.2.0 restriction: >= net452
-nuget xunit.runner.console
-nuget xunit.core 2.2.0 restriction: >= net452
-nuget xunit.assert 2.2.0 restriction: >= net452
-nuget FAKE
-nuget Mono.Cecil >= 0.10.0-beta6
-nuget gtk-sharp3
+nuget Aardvark.Build                ~> 2.0.3
+
+nuget CommandLineParser             ~> 2.9.1
+nuget Mono.Cecil                    ~> 0.11.6
+
+nuget FsCheck.Xunit                 ~> 3.1.0
+nuget xunit                         ~> 2.9.3
+nuget xunit.runner.visualstudio     ~> 3.0.2
+nuget Microsoft.NET.Test.Sdk        ~> 17.9.0

@@ -33,47 +33,47 @@ module public AssertHelpers =
 type public Assert =
 
     static member ApproximatelyEquivalent(a : Vector2,b : Vector2) =
-        if not <| approxEq a.X b.X && approxEq a.Y b.Y then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEq a.X b.X && approxEq a.Y b.Y then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ApproximatelyEquivalent(a : Vector3,b : Vector3) =
-        if not <| approxEq a.X b.X && approxEq a.Y b.Y && approxEq a.Z b.Z then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEq a.X b.X && approxEq a.Y b.Y && approxEq a.Z b.Z then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ApproximatelyEquivalent(a : Vector4,b : Vector4) =
         if not <| approxEq a.X b.X && approxEq a.Y b.Y && approxEq a.Z b.Z && approxEq a.W b.W then
-            raise <| new Xunit.Sdk.EqualException(a,b)
+            raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ApproximatelyEquivalent(a : float32,b : float32) =
-        if not <| approxEq a b then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEq a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
 
     static member ApproximatelyEqualEpsilon(a : float32, b : float32) =
-        if not <| approxEqSingleEpsilon a b then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEqSingleEpsilon a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ApproximatelyEqualEpsilon(a : float32, b : float32, c : float32) =
-        if not <| approxEqSingleEpsilonWithError(a, b, c) then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEqSingleEpsilonWithError(a, b, c) then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
 
     static member ApproximatelyEqualEpsilon(a : float, b : float) =
-        if not <| approxEqDoubleEpsilon a b then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEqDoubleEpsilon a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ApproximatelyEqualEpsilon(a : float, b : float, c : float) =
-        if not <| approxEqDoubleEpsilonWithError(a, b, c) then raise <| new Xunit.Sdk.EqualException(a,b)
+        if not <| approxEqDoubleEpsilonWithError(a, b, c) then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
 
     static member NotApproximatelyEqualEpsilon(a : float32, b : float32) =
-        if approxEqSingleEpsilon a b then raise <| new Xunit.Sdk.EqualException(a,b)
+        if approxEqSingleEpsilon a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member NotApproximatelyEqualEpsilon(a : float32, b : float32, c : float32) =
-        if approxEqSingleEpsilonWithError(a, b, c) then raise <| new Xunit.Sdk.EqualException(a,b)
+        if approxEqSingleEpsilonWithError(a, b, c) then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
 
     static member NotApproximatelyEqualEpsilon(a : float, b : float) =
-        if approxEqDoubleEpsilon a b then raise <| new Xunit.Sdk.EqualException(a,b)
+        if approxEqDoubleEpsilon a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member NotApproximatelyEqualEpsilon(a : float, b : float, c : float) =
-        if approxEqDoubleEpsilonWithError(a, b, c) then raise <| new Xunit.Sdk.EqualException(a,b)
+        if approxEqDoubleEpsilonWithError(a, b, c) then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);
 
     static member ThrowsIndexExn(f:unit -> unit) = Assert.Throws<IndexOutOfRangeException>(f) |> ignore
 
     static member ApproximatelyEqual(a : float32, b : float32) =
-        if not <| approxEqDelta a b then raise <| new Xunit.Sdk.EqualException(a, b)
+        if not <| approxEqDelta a b then raise <| Xunit.Sdk.EqualException.ForMismatchedValues(a, b);

@@ -1,6 +1,7 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator.Bind", "src\Generator.Bind\Generator.Bind.csproj", "{31D19132-0000-0000-0000-000000000000}"
 EndProject
@@ -26,7 +27,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{5EEE
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TestWindow", "TestWindow\TestWindow.fsproj", "{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TestWindow", "src\Tests\TestWindow\TestWindow.fsproj", "{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpenTK.Tests", "src\Tests\OpenTK.Tests\OpenTK.Tests.fsproj", "{6801C263-ADDA-4A7B-979D-649BCB5A1DF7}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpenTK.Tests.Generators", "src\Tests\OpenTK.Tests.Generators\OpenTK.Tests.Generators.fsproj", "{2B11AAEB-D8AC-4356-938F-532D720E0C30}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpenTK.Tests.Integration", "src\Tests\OpenTK.Tests.Integration\OpenTK.Tests.Integration.fsproj", "{522D9279-3ED6-475F-867A-6AE69A53C24A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Tests\Test\Test.csproj", "{32BE20A8-EE13-46BB-8200-1A40ACC5B843}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK.Demo", "src\Tests\OpenTK.Demo\OpenTK.Demo.csproj", "{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,9 +71,37 @@ Global
 		{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6801C263-ADDA-4A7B-979D-649BCB5A1DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6801C263-ADDA-4A7B-979D-649BCB5A1DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6801C263-ADDA-4A7B-979D-649BCB5A1DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6801C263-ADDA-4A7B-979D-649BCB5A1DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B11AAEB-D8AC-4356-938F-532D720E0C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B11AAEB-D8AC-4356-938F-532D720E0C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B11AAEB-D8AC-4356-938F-532D720E0C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B11AAEB-D8AC-4356-938F-532D720E0C30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{522D9279-3ED6-475F-867A-6AE69A53C24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{522D9279-3ED6-475F-867A-6AE69A53C24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{522D9279-3ED6-475F-867A-6AE69A53C24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{522D9279-3ED6-475F-867A-6AE69A53C24A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32BE20A8-EE13-46BB-8200-1A40ACC5B843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BE20A8-EE13-46BB-8200-1A40ACC5B843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BE20A8-EE13-46BB-8200-1A40ACC5B843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BE20A8-EE13-46BB-8200-1A40ACC5B843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F94AD1FA-431C-48CF-BBFA-2A8A22D5112F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6801C263-ADDA-4A7B-979D-649BCB5A1DF7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2B11AAEB-D8AC-4356-938F-532D720E0C30} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{522D9279-3ED6-475F-867A-6AE69A53C24A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{32BE20A8-EE13-46BB-8200-1A40ACC5B843} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AA2811C3-DCB5-806B-7BD2-C717BC5DBCFF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FBEC7C10-1C72-4B7A-B6E4-C5A836D6CB26}

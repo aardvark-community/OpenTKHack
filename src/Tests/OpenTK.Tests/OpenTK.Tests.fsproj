@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+    <WarnOn>3389;3390;3395</WarnOn>
+    <OutputPath>..\..\..\bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="MathHelperTests.fs" />
+    <Compile Include="Matrix4Tests.fs" />
+    <Compile Include="Vector2Tests.fs" />
+    <Compile Include="Vector3Tests.fs" />
+    <Compile Include="Vector4Tests.fs" />
+    <Compile Include="HalfTests.fs" />
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenTK\OpenTK.csproj" />
+    <ProjectReference Include="..\OpenTK.Tests.Generators\OpenTK.Tests.Generators.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\..\.paket\Paket.Restore.targets" />
+</Project>

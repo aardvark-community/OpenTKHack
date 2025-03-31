@@ -1,6 +1,8 @@
 ﻿namespace OpenTK.Tests.Generators
 
 open FsCheck
+open FsCheck.FSharp
+open FsCheck.Fluent
 open System
 open OpenTK
 
@@ -8,11 +10,11 @@ open OpenTK
 module private Generators =
     let private isValidFloat f = not (Single.IsNaN f || Single.IsInfinity f || Single.IsInfinity (f * f) || f = Single.MinValue || f = Single.MaxValue )
     let private isValidDouble d = not (Double.IsNaN d || Double.IsInfinity d || Double.IsInfinity (d * d)|| d = Double.MinValue || d = Double.MaxValue)
-    let singleArb = Arb.Default.Float32() |> Arb.toGen |> Gen.filter isValidFloat
+    let singleArb = ArbMap.Default.GeneratorFor<float32>() |> Gen.filter isValidFloat
     let single = singleArb |> Arb.fromGen
 
     let double =
-        Arb.Default.Float() |> Arb.toGen
+        ArbMap.Default.GeneratorFor<float>()
         |> Gen.filter isValidDouble
         |> Arb.fromGen
 

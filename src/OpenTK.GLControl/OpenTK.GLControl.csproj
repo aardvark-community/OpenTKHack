@@ -1,23 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net471;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net471;net8.0-windows10.0.17763.0</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.1</LangVersion>
+    <NoWarn>1701;1702;1705;3021;1591</NoWarn>
+    <OutputPath>..\..\bin\$(Configuration)</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.1</LangVersion>
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;SDL2;WIN32;CARBON;X11;OPENGL</DefineConstants>
-    <NoWarn>1701;1702;1705;3021;1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Release</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.1</LangVersion>
     <DefineConstants>TRACE;NETSTANDARD2_0;SDL2;WIN32;CARBON;X11;OPENGL</DefineConstants>
-    <NoWarn>1701;1702;1705;3021;1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenTK\OpenTK.csproj" />
