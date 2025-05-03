@@ -71,6 +71,11 @@ namespace OpenTK.Platform.Windows
         {
             get
             {
+                if (disposed)
+                {
+                    throw new InvalidOperationException("WindowInfo already disposed");
+                }
+
                 if (dc == IntPtr.Zero)
                 {
                     dc = Functions.GetDC(this.Handle);

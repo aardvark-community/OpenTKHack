@@ -82,6 +82,14 @@ namespace OpenTK.Platform
             }
         }
 
+        public void UnregisterResource(IDisposable resource)
+        {
+            lock (sync)
+            {
+                Resources.Remove(resource);
+            }
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -96,11 +104,14 @@ namespace OpenTK.Platform
                 {
                     lock (sync)
                     {
-                        foreach (var resource in Resources)
+                        // copy Resources to array because resources will also unregister and change the collection
+                        var resources = Resources.ToArray();
+                        Resources.Clear();
+
+                        foreach(var resource in resources)
                         {
                             resource.Dispose();
                         }
-                        Resources.Clear();
                     }
                 }
                 else

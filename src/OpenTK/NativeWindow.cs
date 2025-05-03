@@ -611,6 +611,7 @@ namespace OpenTK
                     }
                 }
                 implementation.Dispose();
+                Factory.Default.UnregisterResource(this);
                 GC.SuppressFinalize(this);
 
                 IsDisposed = true;

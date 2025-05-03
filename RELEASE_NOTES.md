@@ -1,3 +1,6 @@
+### 3.0.22
+    * fixed leak of manually disposed resources
+
 ### 3.0.21
     * updated generator signatures/overrides
 

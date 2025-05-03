@@ -49,5 +49,7 @@ namespace OpenTK.Platform
         Input.IJoystickDriver2 CreateJoystickDriver();
 
         void RegisterResource(IDisposable resource);
+
+        void UnregisterResource(IDisposable resources);
     }
 }

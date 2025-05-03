@@ -203,6 +203,11 @@ namespace OpenTK.Platform
             Default.RegisterResource(resource);
         }
 
+        public void UnregisterResource(IDisposable resource)
+        {
+            Default.UnregisterResource(resource);
+        }
+
         private class UnsupportedPlatform : PlatformFactoryBase
         {
             private static readonly string error_string = "Please, refer to http://www.opentk.com for more information.";

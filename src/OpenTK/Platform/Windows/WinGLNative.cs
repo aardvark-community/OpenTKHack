@@ -987,7 +987,10 @@ namespace OpenTK.Platform.Windows
             if (Exists)
             {
                 Debug.Print("Destroying window: {0}", window.ToString());
-                Functions.DestroyWindow(window.Handle);
+                if (!Functions.DestroyWindow(window.Handle))
+                {
+                    throw new PlatformException(String.Format("Failed to Destroy Window. Error: {0}", Marshal.GetLastWin32Error()));
+                }
                 exists = false;
             }
         }

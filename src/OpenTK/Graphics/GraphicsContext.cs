@@ -607,6 +607,7 @@ namespace OpenTK.Graphics
                 {
                     Debug.WriteLine("GraphicsContext leaked, did you forget to call Dispose()?");
                 }
+                Factory.Default.UnregisterResource(this);
                 IsDisposed = true;
             }
         }
