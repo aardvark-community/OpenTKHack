@@ -1,5 +1,7 @@
 ### 3.0.22
     * fixed leak of manually disposed resources
+    * fixed leak of marshalled class name strings
+    * fixed UnregisterClass failing silently
 
 ### 3.0.21
     * updated generator signatures/overrides

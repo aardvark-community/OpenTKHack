@@ -50,7 +50,7 @@ namespace OpenTK.Platform.Windows
         private const ExtendedWindowStyle ChildStyleEx = 0;
 
         private readonly IntPtr Instance = GetModuleHandle(Path.GetFileName(typeof(WinGLNative).Assembly.Location));
-        private readonly IntPtr ClassName = Marshal.StringToHGlobalAuto(Guid.NewGuid().ToString());
+        private readonly string ClassName = Guid.NewGuid().ToString();
         private readonly WindowProcedure WindowProcedureDelegate;
 
         private readonly uint ModalLoopTimerPeriod = 1;
@@ -685,10 +685,6 @@ namespace OpenTK.Platform.Windows
         {
             exists = false;
 
-            if (handle == window.Handle)
-            {
-                Functions.UnregisterClass(ClassName, Instance);
-            }
             window.Dispose();
 
             OnClosed(EventArgs.Empty);
@@ -916,67 +912,79 @@ namespace OpenTK.Platform.Windows
 
         private IntPtr CreateWindow(int x, int y, int width, int height, string title, GameWindowFlags options, DisplayDevice device, IntPtr parentHandle)
         {
-            // Use win32 to create the native window.
-            // Keep in mind that some construction code runs in the WM_CREATE message handler.
-
-            // The style of a parent window is different than that of a child window.
-            // Note: the child window should always be visible, even if the parent isn't.
-            WindowStyle style = 0;
-            ExtendedWindowStyle ex_style = 0;
-            if (parentHandle == IntPtr.Zero)
+            var window_name = IntPtr.Zero;
+            var class_name = IntPtr.Zero;
+            try
             {
-                style |= WindowStyle.OverlappedWindow | WindowStyle.ClipChildren;
-                ex_style = ParentStyleEx;
-            }
-            else
-            {
-                style |= WindowStyle.Visible | WindowStyle.Child | WindowStyle.ClipSiblings;
-                ex_style = ChildStyleEx;
-            }
+                // Use win32 to create the native window.
+                // Keep in mind that some construction code runs in the WM_CREATE message handler.
 
-            // Find out the final window rectangle, after the WM has added its chrome (titlebar, sidebars etc).
-            Win32Rectangle rect = new Win32Rectangle();
-            rect.left = x; rect.top = y; rect.right = x + width; rect.bottom = y + height;
-            Functions.AdjustWindowRectEx(ref rect, style, false, ex_style);
-
-            // Create the window class that we will use for this window.
-            // The current approach is to register a new class for each top-level WinGLWindow we create.
-            if (!class_registered)
-            {
-                ExtendedWindowClass wc = new ExtendedWindowClass();
-                wc.Size = ExtendedWindowClass.SizeInBytes;
-                // Setting the background here ensures the window doesn't flash gray/white until the first frame is rendered.
-                wc.Background = Functions.GetStockObject(StockObjects.BLACK_BRUSH);
-                wc.Style = DefaultClassStyle;
-                wc.Instance = Instance;
-                wc.WndProc = WindowProcedureDelegate;
-                wc.ClassName = ClassName;
-                wc.Icon = Icon != null ? Icon.Handle : IntPtr.Zero;
-                // Todo: the following line appears to resize one of the 'large' icons, rather than using a small icon directly (multi-icon files). Investigate!
-                wc.IconSm = Icon != null ? new Icon(Icon, 16, 16).Handle : IntPtr.Zero;
-                wc.Cursor = Functions.LoadCursor(CursorName.Arrow);
-                ushort atom = Functions.RegisterClassEx(ref wc);
-
-                if (atom == 0)
+                // The style of a parent window is different than that of a child window.
+                // Note: the child window should always be visible, even if the parent isn't.
+                WindowStyle style = 0;
+                ExtendedWindowStyle ex_style = 0;
+                if (parentHandle == IntPtr.Zero)
                 {
-                    throw new PlatformException(String.Format("Failed to register window class. Error: {0}", Marshal.GetLastWin32Error()));
+                    style |= WindowStyle.OverlappedWindow | WindowStyle.ClipChildren;
+                    ex_style = ParentStyleEx;
+                }
+                else
+                {
+                    style |= WindowStyle.Visible | WindowStyle.Child | WindowStyle.ClipSiblings;
+                    ex_style = ChildStyleEx;
                 }
 
-                class_registered = true;
+                // Find out the final window rectangle, after the WM has added its chrome (titlebar, sidebars etc).
+                Win32Rectangle rect = new Win32Rectangle();
+                rect.left = x; rect.top = y; rect.right = x + width; rect.bottom = y + height;
+                Functions.AdjustWindowRectEx(ref rect, style, false, ex_style);
+
+                // Create the window class that we will use for this window.
+                // The current approach is to register a new class for each top-level WinGLWindow we create.
+                if (!class_registered)
+                {
+                    class_name = Marshal.StringToHGlobalAuto(ClassName);
+
+                    ExtendedWindowClass wc = new ExtendedWindowClass();
+                    wc.Size = ExtendedWindowClass.SizeInBytes;
+                    // Setting the background here ensures the window doesn't flash gray/white until the first frame is rendered.
+                    wc.Background = Functions.GetStockObject(StockObjects.BLACK_BRUSH);
+                    wc.Style = DefaultClassStyle;
+                    wc.Instance = Instance;
+                    wc.WndProc = WindowProcedureDelegate;
+                    wc.ClassName = class_name;
+                    wc.Icon = Icon != null ? Icon.Handle : IntPtr.Zero;
+                    // Todo: the following line appears to resize one of the 'large' icons, rather than using a small icon directly (multi-icon files). Investigate!
+                    wc.IconSm = Icon != null ? new Icon(Icon, 16, 16).Handle : IntPtr.Zero;
+                    wc.Cursor = Functions.LoadCursor(CursorName.Arrow);
+                    ushort atom = Functions.RegisterClassEx(ref wc);
+
+                    if (atom == 0)
+                    {
+                        throw new PlatformException(String.Format("Failed to register window class. Error: {0}", Marshal.GetLastWin32Error()));
+                    }
+
+                    class_registered = true;
+                }
+
+                window_name = Marshal.StringToHGlobalAuto(title);
+                IntPtr handle = Functions.CreateWindowEx(
+                    ex_style, class_name, window_name, style,
+                    rect.left, rect.top, rect.Width, rect.Height,
+                    parentHandle, IntPtr.Zero, Instance, IntPtr.Zero);
+
+                if (handle == IntPtr.Zero)
+                {
+                    throw new PlatformException(String.Format("Failed to create window. Error: {0}", Marshal.GetLastWin32Error()));
+                }
+
+                return handle;
             }
-
-            IntPtr window_name = Marshal.StringToHGlobalAuto(title);
-            IntPtr handle = Functions.CreateWindowEx(
-                ex_style, ClassName, window_name, style,
-                rect.left, rect.top, rect.Width, rect.Height,
-                parentHandle, IntPtr.Zero, Instance, IntPtr.Zero);
-
-            if (handle == IntPtr.Zero)
+            finally
             {
-                throw new PlatformException(String.Format("Failed to create window. Error: {0}", Marshal.GetLastWin32Error()));
+                Marshal.FreeHGlobal(window_name);
+                Marshal.FreeHGlobal(class_name);
             }
-
-            return handle;
         }
 
         /// <summary>
@@ -1567,6 +1575,14 @@ namespace OpenTK.Platform.Windows
                     if (Icon != null)
                     {
                         Icon.Dispose();
+                    }
+
+                    if (class_registered)
+                    {
+                        if (Functions.UnregisterClass(ClassName, Instance) == 0)
+                        {
+                            throw new PlatformException(String.Format("Failed to unregister window class. Error: {0}", Marshal.GetLastWin32Error()));
+                        }
                     }
                 }
                 else
