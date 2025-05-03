@@ -56,7 +56,6 @@ namespace OpenTK.Platform.Windows
         private readonly uint ModalLoopTimerPeriod = 1;
         private UIntPtr timer_handle;
 
-        private bool class_registered;
         private bool disposed;
         private bool exists;
         private WinWindowInfo window;
@@ -941,30 +940,26 @@ namespace OpenTK.Platform.Windows
 
                 // Create the window class that we will use for this window.
                 // The current approach is to register a new class for each top-level WinGLWindow we create.
-                if (!class_registered)
+               
+                class_name = Marshal.StringToHGlobalAuto(ClassName);
+
+                ExtendedWindowClass wc = new ExtendedWindowClass();
+                wc.Size = ExtendedWindowClass.SizeInBytes;
+                // Setting the background here ensures the window doesn't flash gray/white until the first frame is rendered.
+                wc.Background = Functions.GetStockObject(StockObjects.BLACK_BRUSH);
+                wc.Style = DefaultClassStyle;
+                wc.Instance = Instance;
+                wc.WndProc = WindowProcedureDelegate;
+                wc.ClassName = class_name;
+                wc.Icon = Icon != null ? Icon.Handle : IntPtr.Zero;
+                // Todo: the following line appears to resize one of the 'large' icons, rather than using a small icon directly (multi-icon files). Investigate!
+                wc.IconSm = Icon != null ? new Icon(Icon, 16, 16).Handle : IntPtr.Zero;
+                wc.Cursor = Functions.LoadCursor(CursorName.Arrow);
+                ushort atom = Functions.RegisterClassEx(ref wc);
+
+                if (atom == 0)
                 {
-                    class_name = Marshal.StringToHGlobalAuto(ClassName);
-
-                    ExtendedWindowClass wc = new ExtendedWindowClass();
-                    wc.Size = ExtendedWindowClass.SizeInBytes;
-                    // Setting the background here ensures the window doesn't flash gray/white until the first frame is rendered.
-                    wc.Background = Functions.GetStockObject(StockObjects.BLACK_BRUSH);
-                    wc.Style = DefaultClassStyle;
-                    wc.Instance = Instance;
-                    wc.WndProc = WindowProcedureDelegate;
-                    wc.ClassName = class_name;
-                    wc.Icon = Icon != null ? Icon.Handle : IntPtr.Zero;
-                    // Todo: the following line appears to resize one of the 'large' icons, rather than using a small icon directly (multi-icon files). Investigate!
-                    wc.IconSm = Icon != null ? new Icon(Icon, 16, 16).Handle : IntPtr.Zero;
-                    wc.Cursor = Functions.LoadCursor(CursorName.Arrow);
-                    ushort atom = Functions.RegisterClassEx(ref wc);
-
-                    if (atom == 0)
-                    {
-                        throw new PlatformException(String.Format("Failed to register window class. Error: {0}", Marshal.GetLastWin32Error()));
-                    }
-
-                    class_registered = true;
+                    throw new PlatformException(String.Format("Failed to register window class. Error: {0}", Marshal.GetLastWin32Error()));
                 }
 
                 window_name = Marshal.StringToHGlobalAuto(title);
@@ -1577,12 +1572,9 @@ namespace OpenTK.Platform.Windows
                         Icon.Dispose();
                     }
 
-                    if (class_registered)
+                    if (Functions.UnregisterClass(ClassName, Instance) == 0)
                     {
-                        if (Functions.UnregisterClass(ClassName, Instance) == 0)
-                        {
-                            throw new PlatformException(String.Format("Failed to unregister window class. Error: {0}", Marshal.GetLastWin32Error()));
-                        }
+                        throw new PlatformException(String.Format("Failed to unregister window class. Error: {0}", Marshal.GetLastWin32Error()));
                     }
                 }
                 else
