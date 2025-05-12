@@ -56,6 +56,7 @@ namespace OpenTK.Platform.Windows
         private readonly uint ModalLoopTimerPeriod = 1;
         private UIntPtr timer_handle;
 
+        private bool class_registered;
         private bool disposed;
         private bool exists;
         private WinWindowInfo window;
@@ -962,6 +963,8 @@ namespace OpenTK.Platform.Windows
                     throw new PlatformException(String.Format("Failed to register window class. Error: {0}", Marshal.GetLastWin32Error()));
                 }
 
+                class_registered = true;
+
                 window_name = Marshal.StringToHGlobalAuto(title);
                 IntPtr handle = Functions.CreateWindowEx(
                     ex_style, class_name, window_name, style,
@@ -1572,9 +1575,12 @@ namespace OpenTK.Platform.Windows
                         Icon.Dispose();
                     }
 
-                    if (Functions.UnregisterClass(ClassName, Instance) == 0)
+                    if (class_registered)
                     {
-                        throw new PlatformException(String.Format("Failed to unregister window class. Error: {0}", Marshal.GetLastWin32Error()));
+                        if (Functions.UnregisterClass(ClassName, Instance) == 0)
+                        {
+                            throw new PlatformException(String.Format("Failed to unregister window class. Error: {0}", Marshal.GetLastWin32Error()));
+                        }
                     }
                 }
                 else
